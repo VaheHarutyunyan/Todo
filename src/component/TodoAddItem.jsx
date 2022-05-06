@@ -1,6 +1,7 @@
 import React from "react";
+import { VscAdd } from "react-icons/vsc";
 
-const TodoAddItem = ({newItem, setNewItem, onAddNewItem}) => {
+const TodoAddItem = ({ newItem, setNewItem, onAddNewItem }) => {
   return (
     <div className="todo-add-card">
       <form action="">
@@ -8,19 +9,19 @@ const TodoAddItem = ({newItem, setNewItem, onAddNewItem}) => {
           placeholder="Type new todo"
           type="text"
           value={newItem.title}
-          onChange={e => setNewItem({...newItem, title: e.target.value})}
+          onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
         />
         <button
+          disabled={newItem.title.length === 0 && "disabled"}
           type="submit"
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
-            newItem.title.length !== 0 && onAddNewItem();
+            onAddNewItem();
           }}
         >
-          ADD
+          <VscAdd />
         </button>
       </form>
-      <span>{newItem.title.length !== 0 ? "" : "please feel empty field"}</span>
     </div>
   );
 };

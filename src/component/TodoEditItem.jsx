@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const TodoEditItem = ({ newEdit, setNewEdit, onSaveItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <>
+    <div className="todo-edit-row">
       <form action="">
         <input
           placeholder="Edit name"
@@ -21,15 +21,15 @@ const TodoEditItem = ({ newEdit, setNewEdit, onSaveItem }) => {
         </button>
       </form>
       {isOpen && (
-        <div className="save-modal">
-          <h6>Do you want save todo</h6>
-          <div>
+        <div className="modal">
+          <h4>Do you want save todo</h4>
+          <div className="modal-btn">
             <button onClick={() => onSaveItem()}>Yes</button>
             <button onClick={() => setIsOpen(false)}>No</button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

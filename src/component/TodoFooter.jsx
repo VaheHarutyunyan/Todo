@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const TodoFooter = ({ isChecked, searchQueryData, setTodos }) => {
   return (
-    <div>
+    <>
       {isChecked.length} / {searchQueryData.length} completed
       <span>
         <button
@@ -13,7 +13,7 @@ const TodoFooter = ({ isChecked, searchQueryData, setTodos }) => {
           Clear Completed
         </button>
       </span>
-    </div>
+    </>
   );
 };
 
