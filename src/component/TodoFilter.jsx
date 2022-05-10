@@ -17,9 +17,15 @@ const TodoFilter = ({ filterQuery, setFilterQuery }) => {
           placeholder="Search..."
           type="text"
           value={filterQuery}
-          onChange={(e) => setFilterQuery(e.target.value)}
+          onChange={(e) => setFilterQuery(e.target.value)
+          }
         />
-        <button onClick={() => setIsOpen(false)}>
+        <button
+          onClick={() => {
+            setIsOpen(false);
+            setFilterQuery("");
+          }}
+        >
           <VscClose />
         </button>
       </div>

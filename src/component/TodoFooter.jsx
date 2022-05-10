@@ -1,14 +1,15 @@
 import React from "react";
 
-const TodoFooter = ({ isChecked, searchQueryData, setTodos }) => {
+const TodoFooter = ({ isChecked, searchQueryData, onClearCompleted }) => {
   return (
     <>
       {isChecked.length} / {searchQueryData.length} completed
       <span>
         <button
-          onClick={() => {
-            setTodos(searchQueryData.filter((todo) => !todo.completed));
-          }}
+          onClick={() => onClearCompleted()}
+          // onClick={() => {
+          //   setTodos(searchQueryData.filter((todo) => !todo.completed));
+          // }}
         >
           Clear Completed
         </button>

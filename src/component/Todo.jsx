@@ -1,77 +1,126 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useReducer } from "react";
 import data from "../data/data";
 import TodoList from "./TodoList";
 import TodoFilter from "./TodoFilter";
 import TodoAddItem from "./TodoAddItem";
 import TodoEditItem from "./TodoEditItem";
 import TodoFooter from "./TodoFooter";
+import reducer from "../reducer/reducer";
 
 const Todo = () => {
-  const [todos, setTodos] = useState(data);
+  const [states, dispatch] = useReducer(reducer, data);
+  // const [todos, setTodos] = useState(data);
   const [filterQuery, setFilterQuery] = useState("");
-  const [edit, setEdit] = useState({ title: "" });
-  const [newEdit, setNewEdit] = useState({ title: edit.title });
+  // const [edit, setEdit] = useState({ title: "" });
+  const [newEdit, setNewEdit] = useState({});
   const [newItem, setNewItem] = useState({ title: "" });
-  const [checked, setChecked] = useState(false);
+  // const [checked, setChecked] = useState(false);
   const [isShow, setIsShow] = useState(false);
 
-  const searchQueryData = useMemo(() => {
-    return todos.filter((item) => item.title.includes(filterQuery));
-  }, [filterQuery, todos]);
+  // const searchQueryData = useMemo(() => {
+  //   return states.filter((item) => item.title.includes(filterQuery));
+  // }, [filterQuery, states]);
+  const filtredData = useMemo(() => {
+    return states.filter((todo) => todo.title.includes(filterQuery));
+  }, [filterQuery, states]);
 
-  const onAddNewItem = useCallback(() => {
-    setTodos([
-      ...searchQueryData,
-      { userId: 1, id: Date.now(), completed: false, title: newItem.title },
-    ]);
+  const onAddNewItem = () => {
+    dispatch({
+      type: "add",
+      payload: {
+        title: newItem.title,
+      },
+    });
     setNewItem({ title: "" });
-  }, [newItem.title, searchQueryData]);
+  };
+  // const onAddNewItem = useCallback(() => {
+  //   setTodos([
+  //     ...searchQueryData,
+  //     { userId: 1, id: Date.now(), completed: false, title: newItem.title },
+  //   ]);
+  //   setNewItem({ title: "" });
+  // }, [newItem.title, searchQueryData]);
 
-  const onDeleteItem = useCallback(
-    (id) => {
-      setTodos(searchQueryData.filter((item) => item.id !== id));
-    },
-    [searchQueryData]
-  );
+  const onDeleteItem = (id) => {
+    dispatch({
+      type: "delete",
+      payload: {
+        id: id,
+      },
+    });
+  };
+
+  // const onDeleteItem = useCallback(
+  //   (id) => {
+  //     setTodos(searchQueryData.filter((item) => item.id !== id));
+  //   },
+  //   [searchQueryData]
+  // );
+
+  // const onEditItem = (item) => {
+  //   setIsShow((e) => !e);
+  //   dispatch({
+  //       type: "edit",
+  //       item: item,
+  //   })
+  // };
 
   const onEditItem = useCallback((item) => {
     setIsShow((e) => !e);
-    setEdit(item);
+    // setEdit(item);
     setNewEdit(item);
   }, []);
 
   const onSaveItem = useCallback(() => {
-    setEdit((edit.title = newEdit.title));
+    // setEdit((edit.title = newEdit.title));
+    states.map((todo) => {
+      if (todo.id === newEdit.id) {
+        return (todo = newEdit);
+      }
+      return todo;
+    });
     setNewEdit({ title: "" });
     setIsShow(false);
-    // setFilterQuery("");
-  }, [edit, newEdit.title]);
+  }, [states, newEdit]);
 
-  const onChecked = useCallback(
-    (value) => {
-      setChecked(!value);
-      console.log(checked);
-    },
-    [checked]
-  );
+  // const onChecked = useCallback(
+  //   (value) => {
+  //     setChecked(!value);
+  //     console.log(checked);
+  //   },
+  //   [checked]
+  // );
 
-  const onChangeChecked = useCallback(
-    (newTodo) => {
-      setTodos(
-        searchQueryData.map((todo) => {
-          if (todo.id === newTodo.id) {
-            return newTodo;
-          }
-          return todo;
-        })
-      );
-    },
-    [searchQueryData]
-  );
+  const onChangeChecked = (item) => {
+    dispatch({
+      type: "checked",
+      payload: {
+        item: item,
+      },
+    });
+  };
+  const onClearCompleted = () => {
+    dispatch({
+      type: "clear_copleted",
+    });
+  };
+  // const onChangeChecked = useCallback(
+  //   (newTodo) => {
+  //     setTodos(
+  //       searchQueryData.map((todo) => {
+  //         if (todo.id === newTodo.id) {
+  //           return newTodo;
+  //         }
+  //         return todo;
+  //       })
+  //     );
+  //   },
+  //   [searchQueryData]
+  // );
 
   const isChecked = useMemo(() => {
-    return searchQueryData.filter((item) => item.completed);
-  }, [searchQueryData]);
+    return states.filter((item) => item.completed);
+  }, [states]);
 
   return (
     <div className="todo-card">
@@ -101,18 +150,19 @@ const Todo = () => {
       </div>
       <div className="todo-body">
         <TodoList
-          searchQueryData={searchQueryData}
+          searchQueryData={filtredData}
           onDeleteItem={onDeleteItem}
           onEditItem={onEditItem}
-          onChecked={onChecked}
+          // onChecked={onChecked}
           onChangeChecked={onChangeChecked}
         />
       </div>
       <div className="todo-footer">
         <TodoFooter
           isChecked={isChecked}
-          searchQueryData={searchQueryData}
-          setTodos={setTodos}
+          searchQueryData={filtredData}
+          onClearCompleted={onClearCompleted}
+          // setTodos={setTodos}
         />
       </div>
     </div>

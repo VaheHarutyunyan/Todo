@@ -5,7 +5,7 @@ export default function InputCheckbox({ todo, onChangeChecked }) {
     <input
       type="checkbox"
       checked={todo.completed}
-      onChange={(e) => {
+      onChange={() => {
         onChangeChecked({ ...todo, completed: !todo.completed });
       }}
     />
