@@ -13,6 +13,13 @@ export default function reducer(state, action) {
       ];
     case "delete":
       return state.filter((item) => item.id !== action.payload.id);
+    case "edit":
+      return state.map((todo) => {
+        if (todo.id === action.payload.editID) {
+          todo.title = action.payload.editTitle;
+        }
+        return todo;
+      });
     case "checked":
       return state.map((todo) => {
         if (todo.id === action.payload.item.id) {

@@ -8,21 +8,15 @@ import TodoFooter from "./TodoFooter";
 import reducer from "../reducer/reducer";
 
 const Todo = () => {
-  const [states, dispatch] = useReducer(reducer, data);
-  // const [todos, setTodos] = useState(data);
+  const [todos, dispatch] = useReducer(reducer, data);
   const [filterQuery, setFilterQuery] = useState("");
-  // const [edit, setEdit] = useState({ title: "" });
   const [newEdit, setNewEdit] = useState({});
   const [newItem, setNewItem] = useState({ title: "" });
-  // const [checked, setChecked] = useState(false);
   const [isShow, setIsShow] = useState(false);
 
-  // const searchQueryData = useMemo(() => {
-  //   return states.filter((item) => item.title.includes(filterQuery));
-  // }, [filterQuery, states]);
   const filtredData = useMemo(() => {
-    return states.filter((todo) => todo.title.includes(filterQuery));
-  }, [filterQuery, states]);
+    return todos.filter((todo) => todo.title.includes(filterQuery));
+  }, [filterQuery, todos]);
 
   const onAddNewItem = () => {
     dispatch({
@@ -33,13 +27,6 @@ const Todo = () => {
     });
     setNewItem({ title: "" });
   };
-  // const onAddNewItem = useCallback(() => {
-  //   setTodos([
-  //     ...searchQueryData,
-  //     { userId: 1, id: Date.now(), completed: false, title: newItem.title },
-  //   ]);
-  //   setNewItem({ title: "" });
-  // }, [newItem.title, searchQueryData]);
 
   const onDeleteItem = (id) => {
     dispatch({
@@ -50,46 +37,21 @@ const Todo = () => {
     });
   };
 
-  // const onDeleteItem = useCallback(
-  //   (id) => {
-  //     setTodos(searchQueryData.filter((item) => item.id !== id));
-  //   },
-  //   [searchQueryData]
-  // );
-
-  // const onEditItem = (item) => {
-  //   setIsShow((e) => !e);
-  //   dispatch({
-  //       type: "edit",
-  //       item: item,
-  //   })
-  // };
-
   const onEditItem = useCallback((item) => {
     setIsShow((e) => !e);
-    // setEdit(item);
     setNewEdit(item);
   }, []);
 
-  const onSaveItem = useCallback(() => {
-    // setEdit((edit.title = newEdit.title));
-    states.map((todo) => {
-      if (todo.id === newEdit.id) {
-        return (todo = newEdit);
-      }
-      return todo;
+  const onSaveItem = () => {
+    dispatch({
+      type: "edit",
+      payload: {
+        editID: newEdit.id,
+        editTitle: newEdit.title,
+      },
     });
-    setNewEdit({ title: "" });
     setIsShow(false);
-  }, [states, newEdit]);
-
-  // const onChecked = useCallback(
-  //   (value) => {
-  //     setChecked(!value);
-  //     console.log(checked);
-  //   },
-  //   [checked]
-  // );
+  }
 
   const onChangeChecked = (item) => {
     dispatch({
@@ -104,23 +66,10 @@ const Todo = () => {
       type: "clear_copleted",
     });
   };
-  // const onChangeChecked = useCallback(
-  //   (newTodo) => {
-  //     setTodos(
-  //       searchQueryData.map((todo) => {
-  //         if (todo.id === newTodo.id) {
-  //           return newTodo;
-  //         }
-  //         return todo;
-  //       })
-  //     );
-  //   },
-  //   [searchQueryData]
-  // );
 
   const isChecked = useMemo(() => {
-    return states.filter((item) => item.completed);
-  }, [states]);
+    return todos.filter((item) => item.completed);
+  }, [todos]);
 
   return (
     <div className="todo-card">
@@ -153,7 +102,6 @@ const Todo = () => {
           searchQueryData={filtredData}
           onDeleteItem={onDeleteItem}
           onEditItem={onEditItem}
-          // onChecked={onChecked}
           onChangeChecked={onChangeChecked}
         />
       </div>
@@ -162,7 +110,6 @@ const Todo = () => {
           isChecked={isChecked}
           searchQueryData={filtredData}
           onClearCompleted={onClearCompleted}
-          // setTodos={setTodos}
         />
       </div>
     </div>
