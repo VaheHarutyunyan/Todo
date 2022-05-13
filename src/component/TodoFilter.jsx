@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { TodoFilterContext } from "../context/context";
 import { VscSearch } from "react-icons/vsc";
 import { VscClose } from "react-icons/vsc";
 
-const TodoFilter = ({ filterQuery, setFilterQuery }) => {
+const TodoFilter = () => {
+  const { filterQuery, setFilterQuery } = useContext(TodoFilterContext);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -17,8 +19,7 @@ const TodoFilter = ({ filterQuery, setFilterQuery }) => {
           placeholder="Search..."
           type="text"
           value={filterQuery}
-          onChange={(e) => setFilterQuery(e.target.value)
-          }
+          onChange={(e) => setFilterQuery(e.target.value)}
         />
         <button
           onClick={() => {

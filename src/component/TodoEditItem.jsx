@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { TodoEditContext } from "../context/context";
 
-const TodoEditItem = ({ newEdit, setNewEdit, onSaveItem }) => {
+const TodoEditItem = () => {
+  const { editItem, setEditItem, onSaveItem } = useContext(TodoEditContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="todo-edit-row">
@@ -8,8 +10,8 @@ const TodoEditItem = ({ newEdit, setNewEdit, onSaveItem }) => {
         <input
           placeholder="Edit name"
           type="text"
-          value={newEdit.title}
-          onChange={(e) => setNewEdit({ ...newEdit, title: e.target.value })}
+          value={editItem.title}
+          onChange={(e) => setEditItem({ ...editItem, title: e.target.value })}
         />
         <button
           onClick={(e) => {

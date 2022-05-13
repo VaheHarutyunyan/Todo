@@ -1,4 +1,11 @@
-import React, { useCallback, useMemo, useState, useReducer } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useReducer,
+  // useEffect,
+  // useContext,
+} from "react";
 import data from "../data/data";
 import TodoList from "./TodoList";
 import TodoFilter from "./TodoFilter";
@@ -6,15 +13,25 @@ import TodoAddItem from "./TodoAddItem";
 import TodoEditItem from "./TodoEditItem";
 import TodoFooter from "./TodoFooter";
 import reducer from "../reducer/reducer";
+import {
+  FooterContext,
+  TodoAddContext,
+  TodoEditContext,
+  TodoFilterContext,
+  TodoListContext,
+} from "../context/context";
+// import {useTodo } from "../core/providers/TodoProvider";
 
 const Todo = () => {
+  // const todos = useTodo();
+
   const [todos, dispatch] = useReducer(reducer, data);
   const [filterQuery, setFilterQuery] = useState("");
-  const [newEdit, setNewEdit] = useState({});
-  const [newItem, setNewItem] = useState({ title: "" });
+  const [editItem, setEditItem] = useState({});
+  const [addItem, setAddItem] = useState({ title: "" });
   const [isShow, setIsShow] = useState(false);
 
-  const filtredData = useMemo(() => {
+  const DATA = useMemo(() => {
     return todos.filter((todo) => todo.title.includes(filterQuery));
   }, [filterQuery, todos]);
 
@@ -22,10 +39,10 @@ const Todo = () => {
     dispatch({
       type: "add",
       payload: {
-        title: newItem.title,
+        title: addItem.title,
       },
     });
-    setNewItem({ title: "" });
+    setAddItem({ title: "" });
   };
 
   const onDeleteItem = (id) => {
@@ -39,19 +56,19 @@ const Todo = () => {
 
   const onEditItem = useCallback((item) => {
     setIsShow((e) => !e);
-    setNewEdit(item);
+    setEditItem(item);
   }, []);
 
   const onSaveItem = () => {
     dispatch({
       type: "edit",
       payload: {
-        editID: newEdit.id,
-        editTitle: newEdit.title,
+        editID: editItem.id,
+        editTitle: editItem.title,
       },
     });
     setIsShow(false);
-  }
+  };
 
   const onChangeChecked = (item) => {
     dispatch({
@@ -75,42 +92,42 @@ const Todo = () => {
     <div className="todo-card">
       <div className="todo-header">
         <div className="todo-filter">
-          <TodoFilter
-            filterQuery={filterQuery}
-            setFilterQuery={setFilterQuery}
-          />
+          <TodoFilterContext.Provider value={{ filterQuery, setFilterQuery }}>
+            <TodoFilter />
+          </TodoFilterContext.Provider>
         </div>
         <div className="todo-add">
-          <TodoAddItem
-            newItem={newItem}
-            setNewItem={setNewItem}
-            onAddNewItem={onAddNewItem}
-          />
+          <TodoAddContext.Provider
+            value={{
+              addItem,
+              setAddItem,
+              onAddNewItem,
+            }}
+          >
+            <TodoAddItem />
+          </TodoAddContext.Provider>
         </div>
       </div>
       <div className="todo-edit">
         {isShow && (
-          <TodoEditItem
-            newEdit={newEdit}
-            setNewEdit={setNewEdit}
-            onSaveItem={onSaveItem}
-          />
+          <TodoEditContext.Provider
+            value={{ editItem, setEditItem, onSaveItem }}
+          >
+            <TodoEditItem />
+          </TodoEditContext.Provider>
         )}
       </div>
       <div className="todo-body">
-        <TodoList
-          searchQueryData={filtredData}
-          onDeleteItem={onDeleteItem}
-          onEditItem={onEditItem}
-          onChangeChecked={onChangeChecked}
-        />
+        <TodoListContext.Provider
+          value={{ DATA, onDeleteItem, onEditItem, onChangeChecked }}
+        >
+          <TodoList/>
+        </TodoListContext.Provider>
       </div>
       <div className="todo-footer">
-        <TodoFooter
-          isChecked={isChecked}
-          searchQueryData={filtredData}
-          onClearCompleted={onClearCompleted}
-        />
+        <FooterContext.Provider value={{ DATA, isChecked, onClearCompleted }}>
+          <TodoFooter />
+        </FooterContext.Provider>
       </div>
     </div>
   );

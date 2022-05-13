@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FooterContext } from "../context/context";
 
-const TodoFooter = ({ isChecked, searchQueryData, onClearCompleted }) => {
+const TodoFooter = () => {
+  const { DATA, isChecked, onClearCompleted } = useContext(FooterContext);
   return (
     <>
-      {isChecked.length} / {searchQueryData.length} completed
+      {isChecked.length} / {DATA.length} completed
       <span>
         <button
+          disabled={isChecked.length === 0 && "disabled"}
           onClick={() => onClearCompleted()}
-          // onClick={() => {
-          //   setTodos(searchQueryData.filter((todo) => !todo.completed));
-          // }}
         >
           Clear Completed
         </button>
