@@ -1,31 +1,16 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useReducer,
-  // useEffect,
-  // useContext,
-} from "react";
-import data from "../data/data";
+import React, { useCallback, useMemo, useState } from "react";
+
 import TodoList from "./TodoList";
 import TodoFilter from "./TodoFilter";
 import TodoAddItem from "./TodoAddItem";
 import TodoEditItem from "./TodoEditItem";
 import TodoFooter from "./TodoFooter";
-import reducer from "../reducer/reducer";
-import {
-  FooterContext,
-  TodoAddContext,
-  TodoEditContext,
-  TodoFilterContext,
-  TodoListContext,
-} from "../context/context";
-// import {useTodo } from "../core/providers/TodoProvider";
+
+import { useTodo } from "../core/providers/TodoProvider";
 
 const Todo = () => {
-  // const todos = useTodo();
+  const [todos, dispatch] = useTodo();
 
-  const [todos, dispatch] = useReducer(reducer, data);
   const [filterQuery, setFilterQuery] = useState("");
   const [editItem, setEditItem] = useState({});
   const [addItem, setAddItem] = useState({ title: "" });
@@ -92,42 +77,18 @@ const Todo = () => {
     <div className="todo-card">
       <div className="todo-header">
         <div className="todo-filter">
-          <TodoFilterContext.Provider value={{ filterQuery, setFilterQuery }}>
-            <TodoFilter />
-          </TodoFilterContext.Provider>
+          <TodoFilter />
         </div>
         <div className="todo-add">
-          <TodoAddContext.Provider
-            value={{
-              addItem,
-              setAddItem,
-              onAddNewItem,
-            }}
-          >
-            <TodoAddItem />
-          </TodoAddContext.Provider>
+          <TodoAddItem />
         </div>
       </div>
-      <div className="todo-edit">
-        {isShow && (
-          <TodoEditContext.Provider
-            value={{ editItem, setEditItem, onSaveItem }}
-          >
-            <TodoEditItem />
-          </TodoEditContext.Provider>
-        )}
-      </div>
+      <div className="todo-edit">{isShow && <TodoEditItem />}</div>
       <div className="todo-body">
-        <TodoListContext.Provider
-          value={{ DATA, onDeleteItem, onEditItem, onChangeChecked }}
-        >
-          <TodoList/>
-        </TodoListContext.Provider>
+        <TodoList />
       </div>
       <div className="todo-footer">
-        <FooterContext.Provider value={{ DATA, isChecked, onClearCompleted }}>
-          <TodoFooter />
-        </FooterContext.Provider>
+        <TodoFooter />
       </div>
     </div>
   );
