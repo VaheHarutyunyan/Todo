@@ -1,8 +1,12 @@
-import React, { useContext } from "react";
-import { TodoListContext } from "../context/context";
+import React from "react";
+import { checkedTodoItem } from "../store/action";
+import { useTodo } from "../core/providers/TodoProvider";
 
 export default function InputCheckbox({ todo }) {
-  const { onChangeChecked } = useContext(TodoListContext);
+  const { dispatch } = useTodo();
+  const onChangeChecked = (item) => {
+    dispatch(checkedTodoItem({ item: item }));
+  };
   return (
     <input
       type="checkbox"

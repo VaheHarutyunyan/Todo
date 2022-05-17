@@ -1,11 +1,19 @@
-import React, { useContext } from "react";
-import { FooterContext } from "../context/context";
+import React, { useMemo } from "react";
+import { useTodo } from "../core/providers/TodoProvider";
+import { clearCompletedTodoItem } from "../store/action";
 
 const TodoFooter = () => {
-  const { DATA, isChecked, onClearCompleted } = useContext(FooterContext);
+  const { todos, dispatch } = useTodo();
+  const isChecked = useMemo(() => {
+    return todos.filter((item) => item.completed);
+  }, [todos]);
+  const onClearCompleted = () => {
+    dispatch(clearCompletedTodoItem());
+  };
+
   return (
     <>
-      {isChecked.length} / {DATA.length} completed
+      {isChecked?.length} / {todos?.length} completed
       <span>
         <button
           disabled={isChecked.length === 0 && "disabled"}

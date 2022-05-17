@@ -1,9 +1,15 @@
-import React, { useState, useContext } from "react";
-import { TodoEditContext } from "../context/context";
+import React, { useCallback, useState } from "react";
+import { useTodo } from "../core/providers/TodoProvider";
+import { editTodoItem } from "../store/action";
 
-const TodoEditItem = () => {
-  const { editItem, setEditItem, onSaveItem } = useContext(TodoEditContext);
+const TodoEditItem = ({ editItem, setEditItem }) => {
+  const { dispatch } = useTodo();
   const [isOpen, setIsOpen] = useState(false);
+  const onSaveItem = useCallback(() => {
+    dispatch(editTodoItem({ editID: editItem.id, editTitle: editItem.title }));
+
+    setIsOpen(false);
+  }, [dispatch, editItem.id, editItem.title]);
   return (
     <div className="todo-edit-row">
       <form action="">

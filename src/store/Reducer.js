@@ -7,7 +7,7 @@ import {
   CLEAR_COMPLETED,
 } from "../store/constants";
 
-export const reducer = (state, action) => {
+export default function reducer(state, action) {
   switch (action.type) {
     case FILTER_TODO:
       return state.filter((todo) => todo.title.includes(action.payload.search));
@@ -16,7 +16,7 @@ export const reducer = (state, action) => {
         ...state,
         {
           id: Date.now(),
-          title: action.payload.title,
+          title: action.payload?.title,
           completed: false,
         },
       ];
@@ -41,4 +41,4 @@ export const reducer = (state, action) => {
     default:
       throw new Error();
   }
-};
+}

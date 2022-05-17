@@ -1,15 +1,15 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, createContext, useReducer } from "react";
 import reducer from "../../store/reducer";
 import data from "../../data/data";
 
-export const TodoContext = React.createContext();
-const initialState = data;
+export const TodoContext = createContext();
 
 export const useTodo = () => useContext(TodoContext);
 
+const initialState = data;
+
 const TodoProvider = ({ children }) => {
   const [todos, dispatch] = useReducer(reducer, initialState);
-  // const [todo, setTodo] = useState([]);
   return (
     <TodoContext.Provider
       value={{
@@ -17,7 +17,7 @@ const TodoProvider = ({ children }) => {
         dispatch,
       }}
     >
-      {children}
+      <div>{children}</div>
     </TodoContext.Provider>
   );
 };
