@@ -1,20 +1,25 @@
 import React, { useState, useCallback } from "react";
 import InputCheckbox from "./TodoCheckbox";
-import TodoEditItem from "./TodoEditItem";
+// import TodoEditItem from "./TodoEditItem";
 import { VscEdit } from "react-icons/vsc";
 import { VscArchive } from "react-icons/vsc";
 import { useTodo } from "../core/providers/TodoProvider";
 import { deleteTodoItem } from "../store/action";
+import { useFilter } from "../core/providers/TodoFilterProvider";
+import { useModalContext } from "../core/providers/TodoModalProvider";
 
 const TodoList = () => {
-  const { todos, dispatch } = useTodo();
-  const [isShow, setIsShow] = useState(false);
-  const [editItem, setEditItem] = useState({});
+  const { dispatch, setEditItem } = useTodo();
+  const { handleClickEdit } = useModalContext();
+  const { updateSate } = useFilter();
 
-  const onEditItem = useCallback((item) => {
-    setIsShow((e) => !e);
-    setEditItem(item);
-  }, []);
+  const onEditItem = useCallback(
+    (item) => {
+      handleClickEdit();
+      setEditItem(item);
+    },
+    [handleClickEdit, setEditItem]
+  );
 
   const onDeleteItem = useCallback(
     (id) => {
@@ -26,11 +31,6 @@ const TodoList = () => {
   const [isDelete, setIsDelete] = useState({ show: false, id: "" });
   return (
     <>
-      <div className="todo-edit">
-        {isShow && (
-          <TodoEditItem editItem={editItem} setEditItem={setEditItem} />
-        )}
-      </div>
       {isDelete.show && (
         <div className="modal">
           <h4>Are you sure you wont to delete</h4>
@@ -47,11 +47,11 @@ const TodoList = () => {
           </div>
         </div>
       )}
-      {todos.length === 0 ? (
+      {updateSate.length === 0 ? (
         <h2>Not found</h2>
       ) : (
         <ul>
-          {todos.map((item) => {
+          {updateSate.map((item) => {
             return (
               <React.Fragment key={item.id}>
                 <li>

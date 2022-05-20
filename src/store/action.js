@@ -1,5 +1,5 @@
 import {
-  FILTER_TODO,
+  // FILTER_TODO,
   ADD_TODO,
   EDIT_TODO,
   DELETE_TODO,
@@ -7,12 +7,12 @@ import {
   CLEAR_COMPLETED,
 } from "../store/constants";
 
-export const filterTodoItem = (payload) => {
-  return {
-    type: FILTER_TODO,
-    payload,
-  };
-};
+// export const filterTodoItem = (payload) => {
+//   return {
+//     type: FILTER_TODO,
+//     payload,
+//   };
+// };
 export const addTodoItem = (payload) => {
   return {
     type: ADD_TODO,

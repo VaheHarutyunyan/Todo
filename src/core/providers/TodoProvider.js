@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useReducer } from "react";
+import React, { useContext, createContext, useReducer, useState } from "react";
 import reducer from "../../store/reducer";
 import data from "../../data/data";
 
@@ -10,11 +10,15 @@ const initialState = data;
 
 const TodoProvider = ({ children }) => {
   const [todos, dispatch] = useReducer(reducer, initialState);
+  const [editItem, setEditItem] = useState({});
+
   return (
     <TodoContext.Provider
       value={{
         todos,
         dispatch,
+        editItem,
+        setEditItem,
       }}
     >
       <div>{children}</div>

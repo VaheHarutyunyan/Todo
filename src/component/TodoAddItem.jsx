@@ -21,6 +21,7 @@ const TodoAddItem = () => {
           onClick={(e) => {
             e.preventDefault();
             dispatch(addTodoItem({ title: addItem.title }));
+            setAddItem({ title: "" });
           }}
         >
           <VscAdd />

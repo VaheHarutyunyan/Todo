@@ -1,17 +1,12 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { VscSearch } from "react-icons/vsc";
 import { VscClose } from "react-icons/vsc";
-import { useTodo } from "../core/providers/TodoProvider";
-import { filterTodoItem } from "../store/action";
+import { useFilter } from "../core/providers/TodoFilterProvider";
 
 const TodoFilter = () => {
-  const { dispatch } = useTodo();
-  const [filterQuery, setFilterQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const { filterQuery, setFilterQuery } = useFilter();
 
-  useMemo(() => {
-    dispatch(filterTodoItem({ search: filterQuery }));
-  }, [dispatch, filterQuery]);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="todo-search">

@@ -1,5 +1,5 @@
 import {
-  FILTER_TODO,
+  // FILTER_TODO,
   ADD_TODO,
   EDIT_TODO,
   DELETE_TODO,
@@ -9,8 +9,8 @@ import {
 
 export default function reducer(state, action) {
   switch (action.type) {
-    case FILTER_TODO:
-      return state.filter((todo) => todo.title.includes(action.payload.search));
+    // case FILTER_TODO:
+    //   return state.filter((todo) => todo.title.includes(action.payload.search));
     case ADD_TODO:
       return [
         ...state,
